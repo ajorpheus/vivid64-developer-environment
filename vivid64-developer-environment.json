@@ -127,7 +127,7 @@
     "disk_size": "7500",
     "domain": "",
     "headless": "false",
-    "hostname": "base-vivid-64",
+    "hostname": "vivid64-developer-environment",
     "http_directory": "http",
     "http_port_max": "9000",
     "http_port_min": "8000",
