@@ -127,7 +127,7 @@
     "disk_size": "7500",
     "domain": "",
     "headless": "false",
-    "hostname": "vivid64-developer-environment",
+    "hostname": "{{env `ATLAS_NAME`}}",
     "http_directory": "http",
     "http_port_max": "9000",
     "http_port_min": "8000",
@@ -147,8 +147,7 @@
     "sudo_password": "1ma63b0rk3d",
     "vagrant_box_file": "build/{{isotime \"2006-01-02-15-04\"}}/base-vivid-64.box",
     "vagrantfile_template": "Vagrantfile.template",
-    "vm_name": "base-vivid-64",
-    "vmdk_name": "base-vivid-64",
+    "vm_name": "{{env `ATLAS_NAME`}}",
     "vnc_port_max": "6000",
     "vnc_port_min": "5900"
   }
