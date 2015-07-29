@@ -1,67 +1,155 @@
 {
-  "builders": [{
-    "type": "virtualbox-iso",
-    "guest_os_type": "Ubuntu_64",
-    "iso_url": "{{user `mirror`}}/15.04/ubuntu-15.04-server-amd64.iso",
-    "iso_checksum": "6501c8545374665823384bbb6235f865108f56d8a30bbf69dd18df73c14ccb84",
-    "iso_checksum_type": "sha256",
-    "output_directory": "output-vivid64-developer-environment",
-    "vm_name": "vivid64-developer-environment",
-    "disk_size": "{{user `disk_size`}}",
-    "headless": "{{user `headless`}}",
-    "http_directory": "http",
-    "boot_wait": "5s",
-    "boot_command": [
-      "<esc><wait>",
-      "<esc><wait>",
-      "<enter><wait>",
-      "/install/vmlinuz ",
-      "initrd=/install/initrd.gz ",
-      "biosdevname=0 ",
-      "auto-install/enable=true ",
-      "debconf/priority=critical ",
-      "preseed/url=http://{{.HTTPIP}}:{{.HTTPPort}}/preseed.cfg ",
-      "<enter>"
-    ],
-    "ssh_wait_timeout": "60m",
-    "ssh_username": "vagrant",
-    "ssh_password": "vagrant",
-    "shutdown_command": "sudo poweroff",
-    "vboxmanage": [
-      ["modifyvm", "{{.Name}}", "--memory", "{{user `memory`}}"],
-      ["modifyvm", "{{.Name}}", "--cpus", "{{user `cpus`}}"]
-    ]
-  }],
-  "provisioners": [{
-    "type": "shell",
-    "scripts": [
-      "scripts/cleanup.sh"
-    ]
-  }],
-  "post-processors": [{
-    "type": "vagrant",
-    "compression_level": "{{user `compression_level`}}",
-    "output": "vivid64-developer-environment.box"
+  "push": {
+    "name": "cooperc/vivid64",
+    "vcs": true
   },
-  {
+  "builders": [
+    {
+      "boot_command": [
+        "<esc><esc><enter><wait>",
+        "/install/vmlinuz ",
+        "initrd=/install/initrd.gz ",
+        "auto=true ",
+        "url=http://{{.HTTPIP}}:{{.HTTPPort}}/{{user `preseed_file`}} ",
+        "language=en ",
+        "country=CA ",
+        "locale=en_CA.UTF-8 ",
+        "hostname={{user `hostname`}} ",
+        "domain={{user `domain`}} ",
+        "console-setup/ask_detect=false ",
+        "keyboard-configuration/layoutcode=us ",
+        "vga=788 noprompt quiet --<enter>"
+      ],
+      "boot_wait": "{{user `boot_wait`}}",
+      "disk_size": "{{user `disk_size`}}",
+      "format": "ova",
+      "guest_additions_mode": "upload",
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+      "guest_additions_url": "http://download.virtualbox.org/virtualbox/{{.Version}}/VBoxGuestAdditions_{{.Version}}.iso",
+      "guest_os_type": "Ubuntu_64",
+      "hard_drive_interface": "sata",
+      "headless": "{{user `headless`}}",
+      "http_directory": "{{user `http_directory`}}",
+      "http_port_max": "{{user `http_port_max`}}",
+      "http_port_min": "{{user `http_port_min`}}",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+      "iso_interface": "sata",
+      "iso_urls": [
+        "{{user `iso_path_external`}}/{{user `iso_file`}}"
+      ],
+      "name": "vbox",
+      "output_directory": "{{user `output_directory`}}",
+      "shutdown_command": "echo '{{user `sudo_password`}}' | sudo -E -S poweroff",
+      "shutdown_timeout": "{{user `shutdown_timeout`}}",
+      "ssh_host_port_max": "{{user `ssh_host_port_max`}}",
+      "ssh_host_port_min": "{{user `ssh_host_port_min`}}",
+      "ssh_password": "{{user `sudo_password`}}",
+      "ssh_port": "{{user `ssh_port`}}",
+      "ssh_username": "{{user `ssh_username`}}",
+      "ssh_wait_timeout": "{{user `ssh_wait_timeout`}}",
+      "type": "virtualbox-iso",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "{{user `ram_size`}}"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "1"
+        ]
+      ],
+      "virtualbox_version_file": ".vbox_version",
+      "vm_name": "{{user `vm_name`}}"
+    }
+  ],
+  "description": "Yay",
+  "post-processors": [
+    {
+      "compression_level": 6,
+      "keep_input_artifact": true,
+      "only": [
+        "vbox"
+      ],
+      "output": "{{user `vagrant_box_file`}}",
+      "type": "vagrant",
+      "vagrantfile_template": "{{user `vagrantfile_template`}}"
+    },
+    {
         "type": "atlas",
-        "only": ["virtualbox-iso"],
+        "only": ["vbox"],
         "artifact": "{{user `atlas_username`}}/{{user `atlas_name`}}",
         "artifact_type": "vagrant.box",
         "metadata": {
             "provider": "virtualbox",
-            "version": "0.0.1"
+            "created_at": "{{timestamp}}"
         }
     }
-	],
+  ],
+  "provisioners": [
+    {
+      "execute_command": "echo '{{user `sudo_password`}}' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+      "only": [
+        "vbox"
+      ],
+      "scripts": [
+        "scripts/install_vbox_tools.sh"
+      ],
+      "type": "shell"
+    },
+    {
+      "execute_command": "echo '{{user `sudo_password`}}' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+      "inline": [
+        "apt-get clean"
+      ],
+      "type": "shell"
+    },
+    {
+      "execute_command": "echo '{{user `sudo_password`}}' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+      "only": [
+        "vbox"
+      ],
+      "scripts": [
+        "scripts/enable_passwordless_sudo.sh",
+        "scripts/zero_image_drive.sh"
+      ],
+      "type": "shell"
+    }
+  ],
   "variables": {
     "atlas_username": "{{env `ATLAS_USERNAME`}}",
     "atlas_name": "{{env `ATLAS_NAME`}}",
-    "compression_level": "6",
-    "cpus": "4",
-    "disk_size": "10000",
+    "boot_wait": "3s",
+    "disk_size": "7500",
+    "domain": "",
     "headless": "false",
-    "memory": "4096",
-    "mirror": "http://releases.ubuntu.com"
+    "hostname": "base-vivid-64",
+    "http_directory": "http",
+    "http_port_max": "9000",
+    "http_port_min": "8000",
+    "iso_checksum": "6501c8545374665823384bbb6235f865108f56d8a30bbf69dd18df73c14ccb84",
+    "iso_checksum_type": "sha256",
+    "iso_file": "ubuntu-15.04-server-amd64.iso",
+    "iso_path_external": "http://releases.ubuntu.com/15.04",
+    "output_directory": "build/{{isotime \"2006-01-02-15-04\"}}",
+    "preseed_file": "base.seed",
+    "ram_size": "512",
+    "shutdown_timeout": "5m",
+    "ssh_host_port_max": "7000",
+    "ssh_host_port_min": "6000",
+    "ssh_port": "22",
+    "ssh_username": "ghost",
+    "ssh_wait_timeout": "60m",
+    "sudo_password": "1ma63b0rk3d",
+    "vagrant_box_file": "build/{{isotime \"2006-01-02-15-04\"}}/base-vivid-64.box",
+    "vagrantfile_template": "Vagrantfile.template",
+    "vm_name": "base-vivid-64",
+    "vmdk_name": "base-vivid-64",
+    "vnc_port_max": "6000",
+    "vnc_port_min": "5900"
   }
 }
