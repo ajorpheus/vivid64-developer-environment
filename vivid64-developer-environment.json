@@ -1,6 +1,6 @@
 {
   "push": {
-    "name": "cooperc/vivid64",
+    "name": "cooperc/vivid64-developer-environment",
     "vcs": true
   },
   "builders": [
