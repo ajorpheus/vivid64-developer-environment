@@ -1,8 +1,4 @@
 {
-  "push": {
-    "name": "cooperc/vivid64-developer-environment",
-    "vcs": true
-  },
   "builders": [
     {
       "boot_command": [
@@ -23,6 +19,7 @@
       "boot_wait": "{{user `boot_wait`}}",
       "disk_size": "{{user `disk_size`}}",
       "format": "ova",
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
       "guest_os_type": "Ubuntu_64",
       "hard_drive_interface": "sata",
       "headless": "{{user `headless`}}",
@@ -45,7 +42,6 @@
       "ssh_port": "{{user `ssh_port`}}",
       "ssh_username": "{{user `ssh_username`}}",
       "ssh_wait_timeout": "{{user `ssh_wait_timeout`}}",
-      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
       "type": "virtualbox-iso",
       "vboxmanage": [
         [
@@ -79,14 +75,16 @@
         "vagrantfile_template": "{{user `vagrantfile_template`}}"
       },
       {
-          "type": "atlas",
-          "only": ["vbox"],
-          "artifact": "{{user `atlas_username`}}/{{user `atlas_name`}}",
-          "artifact_type": "vagrant.box",
-          "metadata": {
-              "provider": "virtualbox",
-              "created_at": "{{timestamp}}"
-          }
+        "artifact": "{{user `atlas_username`}}/{{user `atlas_name`}}",
+        "artifact_type": "vagrant.box",
+        "metadata": {
+          "created_at": "{{timestamp}}",
+          "provider": "virtualbox"
+        },
+        "only": [
+          "vbox"
+        ],
+        "type": "atlas"
       }
     ]
   ],
@@ -103,21 +101,25 @@
       "only": [
         "vbox"
       ],
+      "override": {
+        "vbox": {
+          "execute_command": "echo 'vagrant'|sudo -S bash '{{.Path}}'"
+        }
+      },
       "scripts": [
         "scripts/enable_passwordless_sudo.sh",
         "scripts/zero_image_drive.sh"
       ],
-      "override": {
-         "vbox": {
-           "execute_command": "echo 'vagrant'|sudo -S bash '{{.Path}}'"
-         }
-      },
       "type": "shell"
     }
   ],
+  "push": {
+    "name": "cooperc/vivid64-developer-environment",
+    "vcs": true
+  },
   "variables": {
-    "atlas_username": "{{env `ATLAS_USERNAME`}}",
     "atlas_name": "{{env `ATLAS_NAME`}}",
+    "atlas_username": "{{env `ATLAS_USERNAME`}}",
     "boot_wait": "3s",
     "disk_size": "7500",
     "domain": "",
