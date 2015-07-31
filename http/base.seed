@@ -25,8 +25,8 @@ oem-config	oem-config/steps	multiselect language, timezone, keyboard, user, netw
 # Locale Setup
 # must be passed in on the init line as well
 d-i debian-installer/language string en
-d-i debian-installer/country string CA
-d-i debian-installer/locale string en_CA.UTF-8
+d-i debian-installer/country string UK
+d-i debian-installer/locale string en_GB.UTF-8
 # must be passed in on the init line as well
 
 # Keyboard Setup
@@ -36,7 +36,6 @@ d-i keyboard-configuration/layoutcode string us
 # must be passed in on the init line as well
 
 # Clock Setup
-#d-i time/zone string Canada/Eastern
 d-i time/zone string UTC
 d-i clock-setup/utc boolean true
 #   set above to false if making a bootable USB for Windows users
@@ -53,7 +52,6 @@ d-i passwd/user-fullname string Vagrant Writer
 d-i passwd/username string vagrant
 d-i passwd/user-password password vagrant
 d-i passwd/user-password-again password vagrant
-#d-i passwd/user-password-crypted password $6$w5yFawT.$d51yQ513SdzariRCjomBwO9IMtMh6.TjnRwQqTBlOMwGhyyVXlJeYC9kanFp65bpoS1tn9x7r8gLP5Dg4CtEP1
 d-i user-setup/allow-password-weak boolean true
 d-i user-setup/encrypt-home boolean false
 
