@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-username='ghost'
+username='vagrant'
 
 # Make the user a member of the sudo group.
 usermod -a -G sudo ${username}

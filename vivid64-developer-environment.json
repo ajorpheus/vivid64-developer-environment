@@ -117,6 +117,11 @@
         "scripts/enable_passwordless_sudo.sh",
         "scripts/zero_image_drive.sh"
       ],
+      "override": {
+         "virtualbox-iso": {
+           "execute_command": "echo 'vagrant'|sudo -S bash '{{.Path}}'"
+         }
+      }
       "type": "shell"
     }
   ],
