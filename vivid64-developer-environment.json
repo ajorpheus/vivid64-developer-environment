@@ -69,26 +69,28 @@
   ],
   "description": "Yay",
   "post-processors": [
-    {
-      "compression_level": 6,
-      "keep_input_artifact": true,
-      "only": [
-        "vbox"
-      ],
-      "output": "{{user `vagrant_box_file`}}",
-      "type": "vagrant",
-      "vagrantfile_template": "{{user `vagrantfile_template`}}"
-    },
-    {
-        "type": "atlas",
-        "only": ["vbox"],
-        "artifact": "{{user `atlas_username`}}/{{user `atlas_name`}}",
-        "artifact_type": "vagrant.box",
-        "metadata": {
-            "provider": "virtualbox",
-            "created_at": "{{timestamp}}"
-        }
-    }
+    [
+      {
+        "compression_level": 6,
+        "keep_input_artifact": true,
+        "only": [
+          "vbox"
+        ],
+        "output": "{{user `vagrant_box_file`}}",
+        "type": "vagrant",
+        "vagrantfile_template": "{{user `vagrantfile_template`}}"
+      },
+      {
+          "type": "atlas",
+          "only": ["vbox"],
+          "artifact": "{{user `atlas_username`}}/{{user `atlas_name`}}",
+          "artifact_type": "vagrant.box",
+          "metadata": {
+              "provider": "virtualbox",
+              "created_at": "{{timestamp}}"
+          }
+      }
+    ]
   ],
   "provisioners": [
     {
@@ -118,10 +120,10 @@
         "scripts/zero_image_drive.sh"
       ],
       "override": {
-         "virtualbox-iso": {
+         "vbox": {
            "execute_command": "echo 'vagrant'|sudo -S bash '{{.Path}}'"
          }
-      }
+      },
       "type": "shell"
     }
   ],
