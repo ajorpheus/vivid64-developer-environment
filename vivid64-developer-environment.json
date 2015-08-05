@@ -110,7 +110,7 @@
         "scripts/zero_image_drive.sh",
         "scripts/install_java.sh",
         "scripts/install_maven.sh",
-        "scripts/install_scala"
+        "scripts/install_scala.sh"
       ],
       "type": "shell"
     }
