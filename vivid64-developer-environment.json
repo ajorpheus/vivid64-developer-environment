@@ -107,7 +107,8 @@
       },
       "scripts": [
         "scripts/enable_passwordless_sudo.sh",
-        "scripts/zero_image_drive.sh"
+        "scripts/zero_image_drive.sh",
+        "scripts/install_java.sh"
       ],
       "type": "shell"
     }
