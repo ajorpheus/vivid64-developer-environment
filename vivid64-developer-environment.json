@@ -112,7 +112,8 @@
         "scripts/install_developer_tools.sh",
         "scripts/install_java.sh",
         "scripts/install_maven.sh",
-        "scripts/install_scala.sh"
+        "scripts/install_scala.sh",
+        "scripts/install_docker.sh"
       ],
       "type": "shell"
     }
