@@ -1,4 +1,5 @@
 #!/bin/bash
 
+echo "Installing Docker..."
 curl -sSL https://get.docker.com/ubuntu/ | sudo sh
-sudo adduser vagrant docker
+adduser vagrant docker
