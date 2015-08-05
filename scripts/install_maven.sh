@@ -3,7 +3,7 @@
 echo "Installing Maven"
 
 mkdir -p /opt/maven/3.2.5/
-wget --quiet http://apache.crihan.fr/dist/maven/maven-3/3.2.5/binaries/apache-maven-3.2.5-bin.tar.gz -O /opt/maven/3.2.5 -O /opt/maven/3.2.5/apache-maven-3.2.5-bin.tar.gz
+wget --quiet http://apache.crihan.fr/dist/maven/maven-3/3.2.5/binaries/apache-maven-3.2.5-bin.tar.gz -O /opt/maven/3.2.5/apache-maven-3.2.5-bin.tar.gz
 tar xf /opt/maven/3.2.5/apache-maven-3.2.5-bin.tar.gz -C /opt/maven/3.2.5/ --strip 1
 echo "M2_HOME=/opt/maven/3.2.5/" >> /etc/environment
 echo "M2=/opt/maven/3.2.5/bin" >> /etc/environment
