@@ -108,6 +108,7 @@
       "scripts": [
         "scripts/enable_passwordless_sudo.sh",
         "scripts/zero_image_drive.sh",
+        "scripts/install_developer_tools.sh",
         "scripts/install_java.sh",
         "scripts/install_maven.sh",
         "scripts/install_scala.sh"
