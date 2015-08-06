@@ -115,7 +115,8 @@
         "scripts/install_scala.sh",
         "scripts/install_docker.sh",
         "scripts/install_docker_compose.sh",
-        "scripts/install_cf_cli.sh"
+        "scripts/install_cf_cli.sh",
+        "scripts/install_eclipse.sh"
       ],
       "type": "shell"
     }
