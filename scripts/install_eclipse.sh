@@ -11,4 +11,5 @@ wget --quiet -nv ${eclipse} -O /opt/${product}/${version}/$(basename ${eclipse})
 chmod 777 -R /opt/${product}/
 tar zxf /opt/${product}/${version}/$(basename ${eclipse}) -C /opt/${product}/${version} --strip 2 >/dev/null 2>/dev/null
 ln -sf /opt/${product}/${version}/STS /usr/bin/STS
+chown -R vagrant:vagrant /opt/${product}
 rm /opt/${product}/${version}/$(basename ${eclipse})
