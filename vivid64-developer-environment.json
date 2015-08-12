@@ -119,6 +119,7 @@
         "scripts/install_cf_cli.sh",
         "scripts/install_eclipse.sh",
         "scripts/install_intellij.sh",
+        "scripts/install_chrome.sh",
         "scripts/install_mkcast.sh"
       ],
       "type": "shell"
